@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>英澳美模拟器</title>
+    <link rel="stylesheet" href="./styles.css?v=33" />
+  </head>
+  <body>
+    <main class="shell" aria-live="polite">
+      <div class="background home-background" id="sceneBackground" aria-hidden="true"></div>
+      <section class="home-screen" id="homeScreen">
+        <p class="kicker">University Life Simulator</p>
+        <h1>英澳美模拟器</h1>
+        <div class="actions" aria-label="主菜单">
+          <button class="primary-button" id="startButton" type="button">开始游戏</button>
+          <button class="secondary-button" id="reviewButton" type="button">评价一下</button>
+        </div>
+      </section>
+
+      <section class="story-screen hidden" id="storyScreen">
+        <article class="dialogue-box" id="dialogueBox">
+          <p class="scene-label" id="sceneLabel">第一幕：宿舍 · 清晨</p>
+          <div class="typewriter-text" id="storyText"></div>
+          <button class="primary-button continue-button hidden" id="continueButton" type="button">
+            继续
+          </button>
+          <div class="choice-grid hidden" id="choiceGrid" aria-label="行动选择"></div>
+        </article>
+      </section>
+
+      <section class="packing-screen hidden" id="packingScreen">
+        <div class="packing-header">
+          <div>
+            <p class="scene-label">第一幕：宿舍 · 清晨</p>
+            <h2>整理床位</h2>
+            <p>把今天要带的东西放进书包。</p>
+          </div>
+          <div class="progress-pill" id="packingProgress">0 / 5 已整理</div>
+        </div>
+
+        <div class="packing-layout">
+          <section class="item-area" aria-label="床位和书桌上的物品">
+            <div class="desk-surface" id="itemArea"></div>
+          </section>
+          <section class="backpack-zone" id="backpackZone" aria-label="书包放置区">
+            <div class="backpack-icon" aria-hidden="true">书包</div>
+            <p>拖到这里</p>
+            <ul class="packed-list" id="packedList"></ul>
+          </section>
+        </div>
+
+        <div class="completion-panel hidden" id="completionPanel">
+          <p>书包整理好了。手机屏幕亮了一下，像是这一天终于被正式启动。</p>
+          <button class="primary-button" id="nextSceneButton" type="button">继续</button>
+        </div>
+      </section>
+
+      <section class="placeholder-screen hidden" id="placeholderScreen">
+        <article class="dialogue-box">
+          <p class="scene-label">宿舍门口 · 清晨</p>
+          <h2>宿舍门口 · 清晨</h2>
+          <p class="placeholder-copy" id="placeholderCopy">
+            你背上书包，站在宿舍门口。门外的走廊已经有人经过，鞋底擦过地面的声音一下一下远去。
+          </p>
+          <button class="primary-button" id="dormLeaveButton" type="button">确定离开宿舍</button>
+          <button class="secondary-button hidden" id="returnHomeButton" type="button">返回标题</button>
+        </article>
+      </section>
+
+      <section class="route-screen hidden" id="routeScreen">
+        <article class="route-copy">
+          <p class="scene-label">宿舍外 · 清晨</p>
+          <h2>宿舍外 · 清晨</h2>
+          <p>
+            宿舍楼外的空气比房间里清醒很多。
+          </p>
+          <p>
+            清晨的路面还带着一点凉意，远处有人背着书包往教学楼走，也有人拐进旁边的食堂。早餐的味道从建筑物那边飘出来，混着湿漉漉的风。
+          </p>
+          <p>
+            你站在路口，短暂地犹豫了一下。
+          </p>
+        </article>
+        <button class="route-arrow route-classroom" id="goClassroomButton" type="button">
+          <span class="arrow-line"></span>
+          <span class="arrow-label">前往教室</span>
+        </button>
+        <button class="route-arrow route-cafeteria" id="goCafeteriaButton" type="button">
+          <span class="arrow-line"></span>
+          <span class="arrow-label">前往食堂</span>
+        </button>
+      </section>
+
+      <section class="cafeteria-screen hidden" id="cafeteriaScreen">
+        <article class="cafeteria-panel" id="cafeteriaPanel"></article>
+      </section>
+
+      <section class="classroom-screen hidden" id="classroomScreen">
+        <article class="classroom-panel" id="classroomPanel"></article>
+        <button class="building-arrow hidden" id="enterBuildingButton" type="button">
+          <span class="arrow-line"></span>
+          <span class="arrow-label">进入教学楼</span>
+        </button>
+      </section>
+    </main>
+
+    <aside class="teacher-distance hidden" id="teacherDistance" aria-label="吴老师距离">
+      <span>吴老师距离</span>
+      <div class="teacher-meter">
+        <div class="teacher-meter-fill" id="teacherMeterFill"></div>
+      </div>
+      <strong id="teacherDistanceValue">4</strong>
+    </aside>
+
+    <div class="teacher-warning hidden" id="teacherWarning" role="status">
+      吴老师快走过来了，赶紧收起手机！
+    </div>
+
+    <div class="phone-pay-guide hidden" id="phonePayGuide" aria-hidden="true">
+      <span class="pay-guide-arrow"></span>
+      <span id="phoneGuideText">点击手机支付</span>
+    </div>
+
+    <div class="inner-os hidden" id="innerOs" role="status"></div>
+
+    <aside class="game-hud hud-hidden" id="gameHud" aria-label="生存状态">
+      <div class="status-row health-row" aria-label="生命值">
+        <div class="status-icons" id="healthBar"></div>
+      </div>
+      <div class="status-row hunger-row" aria-label="饥饿值">
+        <div class="status-icons" id="hungerBar"></div>
+      </div>
+      <div class="hotbar" id="hotbar" aria-label="物品栏"></div>
+    </aside>
+
+    <div class="toast hidden" id="toast" role="status"></div>
+
+    <dialog class="phone-dialog" id="phoneDialog" aria-labelledby="phoneTitle">
+      <section class="phone-shell">
+        <button class="phone-close" id="closePhone" type="button" aria-label="关闭手机">×</button>
+        <div class="phone-speaker" aria-hidden="true"></div>
+        <div class="phone-screen">
+          <header class="phone-status">
+            <span>07:12</span>
+            <span>英澳美</span>
+          </header>
+          <div class="phone-view" id="phoneView"></div>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog class="schedule-dialog" id="scheduleDialog" aria-labelledby="scheduleTitle">
+      <section class="schedule-panel">
+        <button class="schedule-close" id="closeSchedule" type="button" aria-label="关闭课表">×</button>
+        <h2 id="scheduleTitle">今天的课表</h2>
+        <div class="schedule-image-frame" id="scheduleImageFrame"></div>
+        <button class="primary-button" id="finishScheduleButton" type="button">看完了</button>
+      </section>
+    </dialog>
+
+    <dialog class="review-dialog" id="reviewDialog" aria-labelledby="reviewTitle">
+      <form class="review-panel" id="reviewForm" method="dialog">
+        <button class="close-button" id="closeReview" type="button" aria-label="关闭评价">×</button>
+        <h2 id="reviewTitle">评价一下</h2>
+        <div class="star-picker" role="radiogroup" aria-label="选择星级">
+          <button type="button" data-rating="5" aria-label="5颗星">★★★★★</button>
+          <button type="button" data-rating="4" aria-label="4颗星">★★★★☆</button>
+          <button type="button" data-rating="3" aria-label="3颗星">★★★☆☆</button>
+          <button type="button" data-rating="2" aria-label="2颗星">★★☆☆☆</button>
+          <button type="button" data-rating="1" aria-label="1颗星">★☆☆☆☆</button>
+        </div>
+        <label class="comment-label" for="commentInput">你的评价</label>
+        <textarea id="commentInput" maxlength="180" placeholder="写下你对这个游戏第一印象吧"></textarea>
+        <button class="primary-button submit-button" type="submit">提交评价</button>
+        <div class="reviews" id="reviews" aria-label="玩家评价"></div>
+      </form>
+    </dialog>
+
+    <script src="./script.js?v=33"></script>
+  </body>
+</html>

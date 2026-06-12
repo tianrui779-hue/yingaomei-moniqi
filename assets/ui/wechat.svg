@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="微信">
+  <rect width="256" height="256" rx="34" fill="#1ec900"/>
+  <path fill="#fff" d="M95 32c-48 0-82 31-82 70 0 22 11 42 30 55l-6 31 31-17c9 2 18 4 27 4 4 0 9 0 13-1-9-10-14-23-14-37 0-37 35-67 78-67 0-1 0-2-1-3-12-21-41-35-76-35z"/>
+  <circle cx="68" cy="87" r="9" fill="#1ec900"/>
+  <circle cx="125" cy="87" r="9" fill="#1ec900"/>
+  <path fill="#fff" d="M173 82c-39 0-70 25-70 57s31 57 70 57c8 0 15-1 22-3l27 15-5-27c16-11 26-26 26-43 0-31-31-56-70-56z"/>
+  <circle cx="146" cy="136" r="8" fill="#1ec900"/>
+  <circle cx="197" cy="136" r="8" fill="#1ec900"/>
+</svg>
