@@ -33,7 +33,7 @@ npm install
 
 `rs.sh` runs `render.mjs` with software WebGL and the Playwright Chromium. Two settings in `src/config.js` keep that
 fast enough on a GPU-less machine: `fastFill` (translucent washes in place of p5.brush's watercolour fills) and
-`density: .6667` (the paint layer renders at 1280×720 and is scaled to 1080p). On a machine with a GPU, set
+`density: .5` (the paint layer renders at 960×540 and is scaled to 1080p; karaoke stays full-resolution). On a machine with a GPU, set
 `fastFill: false, density: 1` for the full-quality watercolour.
 
 ## Credits

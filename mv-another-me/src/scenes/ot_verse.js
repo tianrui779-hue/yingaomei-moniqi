@@ -248,7 +248,7 @@
     cai(wC.x, GY, 22, { ...mc, ...wC, flip: true, dy: (mc.dy || 0) + wC.dy + hopC.dy, sq: (mc.sq || 0) + hopC.sq, aR: lerp(-.2, 1.2, five), aL: -.2, hat: 'flower' });
     if (b > 3) { boilSeed('five'); glow(960, GY - 11 * 22, 160 * (1 - seg(b, 3.1, 4)), '#FFE3A0', 1); emote('stars', 960, GY - 12 * 22, 40, seg(b, 3, 3.2), lt); }
     camEnd();
-    if (lt > dur - .3) { boilSeed('wipe8'); brushWipe((lt - (dur - .3)) / .6, ['#3A9C98', '#F2A276']); }
+    if (lt > dur - .3) { boilSeed('wipe8'); brushWipe((lt - (dur - .3)) / .6, ['#7A2E3A', '#E8AA38']); }
   }
 
   shotList(0, [s0, s1, s2, s3, s4, s5, s6, s7, s8]);

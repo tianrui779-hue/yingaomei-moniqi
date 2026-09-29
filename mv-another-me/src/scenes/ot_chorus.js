@@ -56,8 +56,8 @@
 
   // ---------- 9 · 岁月为我大浪淘沙: the wave rises and sweeps the beach clean ----------
   // the wave rears up at the left edge (b0–b2), then rolls across the whole beach (b2–b4)
-  const waveFront = t => kf(t, [[at(9, 0), -60], [at(9, 2), 300], [cutAt(10), W + 700]], easeIn);
-  const waveH = t => lerp(0, 520, easeOut(seg(t, at(9, 0), at(9, 2))));
+  const waveFront = t => kf(t, [[at(14, 0), -60], [at(14, 2), 300], [cutAt(15), W + 700]], easeIn);
+  const waveH = t => lerp(0, 520, easeOut(seg(t, at(14, 0), at(14, 2))));
   function s9(t, lt, dur) {
     const b = beats(lt), f = waveFront(t);
     camBegin(960 + 15 * Math.sin(lt), 520, 1.03 + .02 * lt);
@@ -70,6 +70,7 @@
     cai(1640, GY, 26, { ...m, flip: true, view: 'q', aL: lerp(.2, 1.3, seg(b, 2.3, 2.6)), aR: lerp(.2, 1.3, seg(b, 2.4, 2.7)) });
     bigWave(f, waveH(t), t);
     camEnd();
+    if (lt < .3) brushWipe(.5 + lt / .6, ['#3A9C98', '#F2A276']);
   }
 
   // ---------- 10 · 而你被留下: the wave draws back; one thing is left, 肆, and 采 runs to hug her ----------
@@ -126,7 +127,7 @@
     } else for (const [dx, dy] of [[-150, -360], [140, -380], [0, -440]]) { boilSeed('snowcap' + dx); paint(ellPts(TX + dx * .8, TY + dy * .9 - 8, 50 * pop, 14 * pop, 12), { wash: PAL.cream, ink: PAL.ink, sw: .6 }); }
     if (S.fall) for (let k = 0; k < 22; k++) {   // petals / leaves / snow
       boilSeed('fall' + i + k);
-      const ph = frac(hash(k * 2.3) + (t - at(11, i)) * (.35 + .2 * hash(k))), x = 200 + hash(k * 5.1) * 1600 + 60 * Math.sin(t * 2 + k), y = -50 + ph * 1000;
+      const ph = frac(hash(k * 2.3) + (t - at(16, i)) * (.35 + .2 * hash(k))), x = 200 + hash(k * 5.1) * 1600 + 60 * Math.sin(t * 2 + k), y = -50 + ph * 1000;
       if (S.snow) paint(ellPts(x, y, 7, 7, 8), { wash: '#FFFFFF', ink: PAL.ink, sw: .3 });
       else paint(ellPts(x, y, 13, 7, 10, 0, t * 3 + k), { wash: S.fall, ink: PAL.ink, sw: .4 });
     }
@@ -194,7 +195,7 @@
     const hc = [0, 2].map(hopAt).reduce((a, h) => ({ dy: a.dy + h.dy, sq: a.sq + h.sq }), { dy: 0, sq: 0 });
     const hs = [1, 3].map(hopAt).reduce((a, h) => ({ dy: a.dy + h.dy, sq: a.sq + h.sq }), { dy: 0, sq: 0 });
     // 我亲爱的你呀: turn to each other, lean in, cheek bump on 亲爱, hearts; then hold through the break
-    const lean = ease(seg(t, Y + .1, Y + .45)), bump = spring(t, Y + .5, 5, 20), y0 = Y - cutAt(13);
+    const lean = ease(seg(t, Y + .1, Y + .45)), bump = spring(t, Y + .5, 5, 20), y0 = Y - cutAt(18);
     const mc = emotions(lt, [[0, 'laugh'], [y0 - .15, 'love', { lookX: 1 }]], { take: .7 });
     const ms = emotions(lt, [[0, 'laugh'], [y0, 'love', { lookX: -1 }]], { take: .7 });
     cai(CXd + 110 * lean, GY, 28, { ...mc, dy: (mc.dy || 0) + hc.dy, sq: (mc.sq || 0) + hc.sq, rot: .12 * lean + .05 * bump, aL: t < Y ? 1.2 + .3 * Math.sin(lt * 8) : .2, aR: t < Y ? 1.1 : lerp(.2, .6, lean), blush: lean });
@@ -326,7 +327,7 @@
 
   // ---------- 19–21 · 啦啦啦啦 我亲爱的你呀 + outro: the Taipei roof again, together ----------
   function s19(t, lt, dur) {
-    const Y = YA_S, y0 = Y - cutAt(18);   // 我亲爱的你呀 starts; the four 啦 are at LA_S
+    const Y = YA_S, y0 = Y - cutAt(23);   // 我亲爱的你呀 starts; the four 啦 are at LA_S
     camBegin(960, lerp(540, 470, ease(seg(t, Y + 1.2, Y + 5))), lerp(1.02, 1.12, ease(seg(t, Y - 1, DUR))));
     skyIn(FULL, '#1F2550', '#3E4C8C', t, 'fsky');
     starsIn(FULL, t, 40, 'fst');
@@ -357,5 +358,5 @@
     if (endK > 0) iris(irisAt[0], irisAt[1] - 40, lerp(1300, 0, easeIn(endK)), PAL.night);
   }
 
-  shotList(9, [s9, s10, s11, s12, s13, s15, s16, s17, s18, s19]);
+  shotList(14, [s9, s10, s11, s12, s13, s15, s16, s17, s18, s19]);
 })();
