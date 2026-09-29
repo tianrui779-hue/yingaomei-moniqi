@@ -3,6 +3,8 @@
 Style: the painted-animation skill (p5.brush watercolour + boiling ink, karaoke in Ma Shan Zheng), same look as the
 《小镇姑娘》 example the user sent.
 
+**Length:** 64 s with audio.
+
 **Logline:** Two square friends live a world apart (Taipei / Shanghai, Berlin / Bangkok), always on opposite sides of
 a torn-paper seam, yet every move one makes the other feels at the same moment. Time washes everything else away, but
 never the other one; in the end the seam is gone and they watch the same fireworks, together.
@@ -18,14 +20,19 @@ The karaoke fill colour follows the singer: rose for 郭, butter for 肆.
 warm fireworks night (together). **Rhyme:** opens on 采 alone under Taipei fireworks; ends with both of them under
 the same fireworks, clinking the Mojito from line 2.
 
-## Song grid
+## Song grid (measured)
 
-The song file and LRC weren't available in the session, so the grid is an assumption to be replaced by a measured one:
-**92 BPM, 4/4, one lyric line = one bar (4 beats ≈ 2.61 s)**, the "啦啦啦啦 我亲爱的你呀" lines = 2 bars.
-Everything in the scenes is keyed to `bar(n)` / beats (`src/scenes/ot_set.js`), so re-timing to the real song means
-changing `bpm`/`offset` in `src/config.js` and, if a line isn't exactly a bar, its entry in `LINES`.
-The clip = verse 1 (郭 4 lines) + verse 2 (肆 4 lines) + chorus (郭 half, 肆 half); the pre-chorus is skipped with a
-bar-aligned audio splice.
+From the song recording the user supplied: **132.5 BPM** (`beat_grid.py`), and each line's onset from the vocal track
+(isolated with Spleeter, then its energy and pitch contour). Verse lines are 8 beats (~3.6 s), except the first
+「世界上的另一个我」 (4 beats); the chorus alternates 5–6 and 3 beat lines, then 「啦啦啦啦 我亲爱的你呀」.
+
+The clip (`assets/clip.m4a`, 64.0 s) = song 12.684 s (a beat in the whistle intro) → 43.363 s (end of verse 2), then a
+34-beat cut over the pre-chorus 「人生到处是假正经…」 to 58.760 s (both cut points fall between sung words; 60 ms
+crossfade), then the whole chorus (郭's half, a short break, 肆's half) and the outro with a fade.
+
+Shot cuts and karaoke come from `CUTS` / `LINES` in `src/scenes/ot_set.js` (song seconds). Each shot's staging is in
+quarters of its own length (`Q`); the two 「啦啦啦啦」 shots hit the four measured 啦 notes (`LA_G`, `LA_S`).
+The table below keeps the original bar numbering as shot names.
 
 | Bar | Line (singer) | Shot | Beat hits | Out |
 |---|---|---|---|---|

@@ -1,12 +1,12 @@
 // ot_verse.js: bars 0–8. Verse 1 (郭: Taipei / Shanghai) and verse 2 (肆: Berlin / Bangkok), apart across the seam.
-// b = beats into the shot (BEAT ≈ .652 s at 92 BPM); every hit below is on a beat.
+// b = quarters of the shot (Q = shot length / 4), so each shot's staging fits its sung line.
 (() => {
   const GY = 900;                                   // where feet stand
   const NIGHT = { top: '#1F2550', hor: '#3E4C8C', bld: '#262B58', bld2: '#1B1F44', win: '#F2B84E', roof: '#4B4A6C' };
   const DUSK = { top: '#7E6AA6', hor: '#F2A98A', bld: '#6A5A8E', water: '#5D6FA0', rail: '#4A3E66' };
   const RAINY = { top: '#76869E', hor: '#A9B6C6', bld: '#5F6D84', street: '#4E5A6E' };
   const SUNNY = { top: '#8EC3E6', hor: '#FFE3A8', street: '#E6CFA0' };
-  const beats = lt => lt / BEAT;
+  const beats = lt => lt / Q;
 
   // ---------- the four places, each drawn into a region (full frame or half of the split) ----------
   function taipeiIn(R, t, o = {}) {
@@ -62,28 +62,28 @@
   function s0(t, lt, dur) {
     const b = beats(lt), push_ = easeIn(seg(b, 3, 4));
     camBegin(lerp(W / 2, W / 4 + 60, push_), lerp(540, 520, push_), lerp(1, 1.95, push_));
-    taipeiIn(LEFT, t, { tx: 120, s: 22, fireworks: () => firework(t, bar(1), 330, 250, '#F4B63A', { climb: 1.9, x0: 250, gy: 820 }) });
-    cai(560, GY, 17, emotions(lt, [[0, 'sleepy', { lookX: .6 }], [2.2 * BEAT, 'surprised', { lookX: -.4, lookY: -1 }]], { take: .6 }));
+    taipeiIn(LEFT, t, { tx: 120, s: 22, fireworks: () => firework(t, cutAt(1), 330, 250, '#F4B63A', { climb: 1.9, x0: 250, gy: 820 }) });
+    cai(560, GY, 17, emotions(lt, [[0, 'sleepy', { lookX: .6 }], [2.2 * Q, 'surprised', { lookX: -.4, lookY: -1 }]], { take: .6 }));
     shanghaiIn(RIGHT, t, { tx: 200, s: 26 });
     si(1330, GY, 17, { ...feel('happy', t, { lookX: -.4 }), aR: .3, armR: glass(.3, .8) });
     seam(t, 1);
-    const at = toScreen(W / 2, 560);
+    const irisAt = toScreen(W / 2, 560);
     camEnd();
-    if (b < 1.2) iris(at[0], at[1], lerp(0, 1300, easeIn(b / 1.2)), PAL.night);
+    if (b < 1.2) iris(irisAt[0], irisAt[1], lerp(0, 1300, easeIn(b / 1.2)), PAL.night);
   }
 
   // ---------- 1 · 上一秒我在台北看烟火: fireworks over Taipei 101, 采 is starstruck ----------
   function s1(t, lt, dur) {
     const b = beats(lt);
     camBegin(980 + 20 * Math.sin(lt * .7), 520 - 8 * lt, 1.06 + .02 * lt);
-    const t0 = bar(1);
+    const t0 = cutAt(1);
     taipeiIn(FULL, t, { tx: 380, s: 44, fireworks: () => {
       firework(t, t0, 760, 260, '#F4B63A', { r: 250, x0: 700, gy: 820 });
-      firework(t, t0 + 2 * BEAT, 1500, 200, '#E27A92', { r: 210, n: 14, x0: 1450, gy: 820, climb: .5 });
-      firework(t, t0 + 3 * BEAT, 1080, 330, '#6FC3C0', { r: 190, n: 12, x0: 1120, gy: 820, climb: .45, rot: .2 });
+      firework(t, at(1, 2), 1500, 200, '#E27A92', { r: 210, n: 14, x0: 1450, gy: 820, climb: .5 });
+      firework(t, at(1, 3), 1080, 330, '#6FC3C0', { r: 190, n: 12, x0: 1120, gy: 820, climb: .45, rot: .2 });
     } });
-    const m = emotions(lt, [[0, 'surprised', { lookX: .3, lookY: -1 }], [1.1 * BEAT, 'starstruck', { lookX: .5, lookY: -1 }]], { take: .9 });
-    const hop = jump(lt, 2 * BEAT, 2 * BEAT + .35, .8);
+    const m = emotions(lt, [[0, 'surprised', { lookX: .3, lookY: -1 }], [1.1 * Q, 'starstruck', { lookX: .5, lookY: -1 }]], { take: .9 });
+    const hop = jump(lt, 2 * Q, 2 * Q + .35, .8);
     cai(640, GY, 28, { ...m, dy: (m.dy || 0) + hop.dy, sq: (m.sq || 0) + hop.sq, aL: .9 + .25 * Math.sin(lt * 7), aR: 1.1 });
     camEnd();
     if (lt > dur - .22) whipPan((lt - (dur - .22)) / .44, [NIGHT.top, DUSK.hor]);
@@ -95,11 +95,11 @@
     camBegin(940 - 15 * lt, 540, 1.04 + .03 * lt);
     shanghaiIn(FULL, t, { tx: 420, s: 50 });
     const lift = ease(seg(b, 1, 1.5)), a = lerp(-.15, .95, lift), level = lerp(.8, .5, ease(seg(b, 2, 3.2)));
-    const m = emotions(lt, [[0, 'happy', { lookX: .6 }], [2 * BEAT, 'love', { lookX: .2, blush: 1 }]], { take: .7 });
+    const m = emotions(lt, [[0, 'happy', { lookX: .6 }], [2 * Q, 'love', { lookX: .2, blush: 1 }]], { take: .7 });
     si(760, GY, 28, { ...m, aR: a, aL: .15 + .1 * Math.sin(lt * 3), armR: glass(a, level) });
     // bubbles from the glass on the beats of the sip
     for (let i = 0; i < 6; i++) {
-      const te = bar(2) + (2 + i * .33) * BEAT, age = t - te;
+      const te = at(2, 2 + i * .33), age = t - te;
       if (age < 0 || age > .9) continue;
       boilSeed('bub' + i);
       const x = 760 + 7 * 28 + 30 * Math.sin(i * 2 + age * 5), y = GY - 11 * 28 - age * 220;
@@ -131,13 +131,13 @@
     splitCities(t);
     // 采 reaches right to the seam on b0; 肆 turns on the ripple (b1) and reaches left on b2
     const reachC = backOut(seg(b, 0, .45)), reachS = backOut(seg(b, 2, 2.45));
-    const mc = emotions(lt, [[0, 'hopeful', { lookX: 1 }], [3 * BEAT, 'love', { lookX: 1 }]], { take: .6 });
+    const mc = emotions(lt, [[0, 'hopeful', { lookX: 1 }], [3 * Q, 'love', { lookX: 1 }]], { take: .6 });
     cai(CX, GY, 22, { ...mc, aR: lerp(-.4, .05, reachC), aL: -.3 });
-    const ms = emotions(lt, [[0, 'happy', { lookX: .8 }], [1 * BEAT, 'surprised', { lookX: -1 }], [3 * BEAT, 'love', { lookX: -1 }]], { take: .8 });
-    si(SX, GY, 22, { ...ms, ...turn(lt, 1.05 * BEAT, 1.3 * BEAT, .25, 0), aL: lerp(-.4, .05, reachS), aR: -.2, armR: glass(-.2, .5) });
+    const ms = emotions(lt, [[0, 'happy', { lookX: .8 }], [1 * Q, 'surprised', { lookX: -1 }], [3 * Q, 'love', { lookX: -1 }]], { take: .8 });
+    si(SX, GY, 22, { ...ms, ...turn(lt, 1.05 * Q, 1.3 * Q, .25, 0), aL: lerp(-.4, .05, reachS), aR: -.2, armR: glass(-.2, .5) });
     seam(t, 1);
-    ripple(t, bar(3) + .4 * BEAT, SEAM_X + 12, GY - 4.4 * 22, 1, '#F2C0A8');
-    ripple(t, bar(3) + 2.4 * BEAT, SEAM_X - 12, GY - 4.4 * 22, -1, '#AFC0F0');
+    ripple(t, at(3, .4), SEAM_X + 12, GY - 4.4 * 22, 1, '#F2C0A8');
+    ripple(t, at(3, 2.4), SEAM_X - 12, GY - 4.4 * 22, -1, '#AFC0F0');
     if (b > 3) { boilSeed('meet'); glow(SEAM_X, GY - 4.4 * 22, 170 * easeOut(seg(b, 3, 3.3)), '#FFD9A0', 1); }
     camEnd();
   }
@@ -147,7 +147,7 @@
     const b = beats(lt);
     camBegin(W / 2, 520, 1 - .06 * ease(seg(b, 0, 4)));
     splitCities(t);
-    const hop1 = jump(lt, .05, .45, 1.6), hop2 = jump(lt, 2 * BEAT + .05, 2 * BEAT + .45, 1.6);
+    const hop1 = jump(lt, .05, .45, 1.6), hop2 = jump(lt, 2 * Q + .05, 2 * Q + .45, 1.6);
     const lean = .22 * Math.sin(seg(b, 1, 2) * Math.PI) - .22 * Math.sin(seg(b, 3, 4) * Math.PI);
     const pose = (side) => ({
       ...feel('happy', t, { lookX: side }), dy: hop1.dy + hop2.dy, sq: hop1.sq + hop2.sq, rot: side * lean,
@@ -169,7 +169,7 @@
     berlinIn(FULL, t, { tx: 420, s: 56 });
     rainIn(FULL, t, 1, '#DCE6F2', 'r5');
     const inv = easeOut(seg(b, 2, 2.35)), gust = seg(b, 1.8, 2.6);
-    const m = emotions(lt, [[0, 'relieved', { lookX: .4, lookY: -.3 }], [2.05 * BEAT, 'surprised', { lookY: -1 }], [3 * BEAT, 'cry', { emote: 'cloud' }]], { take: 1 });
+    const m = emotions(lt, [[0, 'relieved', { lookX: .4, lookY: -.3 }], [2.05 * Q, 'surprised', { lookY: -1 }], [3 * Q, 'cry', { emote: 'cloud' }]], { take: 1 });
     const a = 1.25 + .15 * Math.sin(lt * 4) + .25 * inv * Math.sin(lt * 20) * (1 - seg(b, 2.4, 3));
     si(760 + 40 * ease(gust) , GY, 28, { ...m, aR: a, aL: -.2, rot: .08 * inv * (1 - seg(b, 3, 4)), armR: umb(a, 1, inv) });
     // the gust: a couple of wind curls sweeping in from the left
@@ -188,7 +188,7 @@
     const b = beats(lt);
     camBegin(960 - 20 * lt, 540, 1.04 + .02 * lt);
     bangkokIn(FULL, t, { tx: 360, s: 74, ps: 70, sun: () => sunFace(1480, 230, 95, t, seg(b, 0, .6)) });
-    const m = emotions(lt, [[0, 'happy', { lookX: .6, lookY: -.6 }], [1 * BEAT, 'cool'], [3 * BEAT, 'proud']], { take: .7 });
+    const m = emotions(lt, [[0, 'happy', { lookX: .6, lookY: -.6 }], [1 * Q, 'cool'], [3 * Q, 'proud']], { take: .7 });
     const thumb = backOut(seg(b, 3, 3.35));
     cai(700, GY, 28, { ...m, aR: lerp(-.2, 1.3, thumb), aL: -.2, emote: b > 3 ? 'spark' : m.emote, emoteK: b > 3 ? thumb : m.emoteK });
     camEnd();
@@ -197,7 +197,7 @@
 
   // ---------- 7 · 你感受我 就像我感受你: 采 rolls the sun over the seam; 肆 sends her umbrella back ----------
   const SUN0 = [1500, 250], SUN1 = [470, 240];
-  const sunAt = t => { const k = ease(seg(t, bar(7), bar(7) + 2 * BEAT)); return arcPt(SUN0, SUN1, 180, k); };
+  const sunAt = t => { const k = ease(seg(t, at(7, 0), at(7, 2))); return arcPt(SUN0, SUN1, 180, k); };
   function s7(t, lt, dur) {
     const b = beats(lt), clear = ease(seg(b, 1.2, 2.2));
     camBegin(W / 2, 540, 1);
@@ -205,11 +205,11 @@
     rainIn(LEFT, t, 1 - clear, '#DCE6F2', 'r7');
     bangkokIn(RIGHT, t, { tx: 260, s: 44, ps: 40, palms: [1860] });
     // 肆 (left): soaked → sun arrives → happy; sends the umbrella over on b2.5
-    const ms = emotions(lt, [[0, 'sad', { lookX: 1, emote: 'cloud' }], [1.6 * BEAT, 'surprised', { lookY: -1 }], [2.1 * BEAT, 'happy', { lookX: 1 }]], { take: .7 });
+    const ms = emotions(lt, [[0, 'sad', { lookX: 1, emote: 'cloud' }], [1.6 * Q, 'surprised', { lookY: -1 }], [2.1 * Q, 'happy', { lookX: 1 }]], { take: .7 });
     const toss = seg(b, 2.4, 3.3), aS = lerp(1.25, .6, ease(seg(b, 2.2, 2.5)));
     si(CX - 40, GY, 22, { ...ms, aR: aS, aL: -.2, armR: toss <= 0 ? umb(aS, 1, 1 - ease(seg(b, 2, 2.4))) : null });
     // 采 (right): pushes the sun off with a big swing on b0; takes the umbrella on b3.3
-    const mc = emotions(lt, [[0, 'cool'], [.6 * BEAT, 'playful', { lookX: -1 }], [3.3 * BEAT, 'love', { lookX: -.4 }]], { take: .6 });
+    const mc = emotions(lt, [[0, 'cool'], [.6 * Q, 'playful', { lookX: -1 }], [3.3 * Q, 'love', { lookX: -.4 }]], { take: .6 });
     const swing = Math.sin(seg(b, 0, .8) * Math.PI), hold = toss >= 1;
     cai(SX + 60, GY, 22, { ...mc, aL: .4 + 1.0 * swing, aR: hold ? 1.3 : -.2, armR: hold ? umb(1.3, 1, 0, 1.6) : null });
     seam(t, 1);
@@ -240,10 +240,10 @@
     sunFace(SUN1[0], SUN1[1], 80, t, 1, { key: 'sun7' });
     rainbow(ease(seg(b, .6, 2.4)), t);
     seam(t, 1, ease(seg(b, 0, 1.6)));
-    const wS = stroll(lt, 1.4 * BEAT, 2.9 * BEAT, CX - 40, 850, 22), wC = stroll(lt, 1.4 * BEAT, 2.9 * BEAT, SX + 60, 1070, 22);
-    const five = backOut(seg(b, 2.9, 3.2)), hopS = jump(lt, 3 * BEAT, 3 * BEAT + .35, 1), hopC = jump(lt, 3 * BEAT + .06, 3 * BEAT + .41, 1);
-    const ms = emotions(lt, [[0, 'happy', { lookX: 1 }], [3 * BEAT, 'excited']], { take: .6 });
-    const mc = emotions(lt, [[0, 'love', { lookX: -1 }], [3 * BEAT, 'excited']], { take: .6 });
+    const wS = stroll(lt, 1.4 * Q, 2.9 * Q, CX - 40, 850, 22), wC = stroll(lt, 1.4 * Q, 2.9 * Q, SX + 60, 1070, 22);
+    const five = backOut(seg(b, 2.9, 3.2)), hopS = jump(lt, 3 * Q, 3 * Q + .35, 1), hopC = jump(lt, 3 * Q + .06, 3 * Q + .41, 1);
+    const ms = emotions(lt, [[0, 'happy', { lookX: 1 }], [3 * Q, 'excited']], { take: .6 });
+    const mc = emotions(lt, [[0, 'love', { lookX: -1 }], [3 * Q, 'excited']], { take: .6 });
     si(wS.x, GY, 22, { ...ms, ...wS, flip: false, dy: (ms.dy || 0) + wS.dy + hopS.dy, sq: (ms.sq || 0) + hopS.sq, aR: lerp(-.2, 1.2, five), aL: -.2 });
     cai(wC.x, GY, 22, { ...mc, ...wC, flip: true, dy: (mc.dy || 0) + wC.dy + hopC.dy, sq: (mc.sq || 0) + hopC.sq, aR: lerp(-.2, 1.2, five), aL: -.2, hat: 'flower' });
     if (b > 3) { boilSeed('five'); glow(960, GY - 11 * 22, 160 * (1 - seg(b, 3.1, 4)), '#FFE3A0', 1); emote('stars', 960, GY - 12 * 22, 40, seg(b, 3, 3.2), lt); }
@@ -251,5 +251,5 @@
     if (lt > dur - .3) { boilSeed('wipe8'); brushWipe((lt - (dur - .3)) / .6, ['#3A9C98', '#F2A276']); }
   }
 
-  shots([[0, s0], [bar(1), s1], [bar(2), s2], [bar(3), s3], [bar(4), s4], [bar(5), s5], [bar(6), s6], [bar(7), s7], [bar(8), s8]]);
+  shotList(0, [s0, s1, s2, s3, s4, s5, s6, s7, s8]);
 })();

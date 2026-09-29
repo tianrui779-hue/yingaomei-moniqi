@@ -1,18 +1,28 @@
 // ot_set.js: the world of 世界上的另一个我: the song grid, the two friends, the split-screen seam, the four cities,
 // and the props every shot shares. The shots live in ot_verse.js and ot_chorus.js.
 
-// ---------- song grid ----------
-// One lyric line = one bar (see STORYBOARD.md). Everything is keyed to bar(n) and beats, so re-timing to the measured
-// song is a change of PROJECT.bpm / offset (and LINES, if a line isn't exactly a bar).
-const BAR = 4 * BEAT;
-const bar = n => OFF + n * BAR;
-// [first bar, bars, text, singer]  (singer: 'g' 郭采洁, 's' 阿肆)
+// ---------- song grid (measured: 132.5 BPM, from the separated vocal track; see STORYBOARD.md) ----------
+// assets/clip.m4a = the song from 12.684 s (a beat in the whistle intro) through both verses, then a 34-beat cut over
+// the pre-chorus (43.363 → 58.760 s, both between sung words, 60 ms crossfade), then the whole chorus.
+const SONG = s => s < 43.363 ? s - 12.684 : s - 28.141;       // song time → clip time
+// Shot cuts in song seconds, each where its line starts being sung. Shots act in quarters of their own length (Q), so
+// the same staging stretches to a long line or squeezes into a short one.
+const CUTS = [12.684, 16.20, 19.92, 23.14, 27.16, 28.97, 32.37, 35.92, 40.26,
+  58.87, 61.84, 63.96, 65.87, 67.58, 74.69, 76.36, 78.32, 80.15, 81.90].map(SONG);
+const cutAt = i => CUTS[i];
+const at = (i, q) => CUTS[i] + q * ((CUTS[i + 1] ?? DUR) - CUTS[i]) / 4;   // q quarters into shot i
+let Q = BEAT;                                                                // a quarter of the shot being drawn
+function shotList(first, fns) { shots(fns.map((fn, j) => [CUTS[first + j], (t, lt, dur) => { Q = dur / 4; fn(t, lt, dur); }])); }
+// [song onset, song end, text, singer ('g' 郭采洁, 's' 阿肆)]
 const LINES = [
-  [1, 1, '上一秒我在台北看烟火', 'g'], [2, 1, '下一秒你在上海喝Mojito', 'g'], [3, 1, '你感觉我 就像我感觉你', 'g'], [4, 1, '世界上的另一个我', 'g'],
-  [5, 1, '上一秒我在柏林落大雨', 's'], [6, 1, '下一秒你在曼谷天气晴', 's'], [7, 1, '你感受我 就像我感受你', 's'], [8, 1, '世界上的另一个我', 's'],
-  [9, 1, '岁月为我大浪淘沙', 'g'], [10, 1, '而你被留下', 'g'], [11, 1, '我的世界流转变化', 'g'], [12, 1, '你却没时差', 'g'], [13, 2, '啦啦啦啦 我亲爱的你呀', 'g'],
-  [15, 1, '岁月待我晴雨交加', 's'], [16, 1, '而你被孵化', 's'], [17, 1, '我的心事纷乱复杂', 's'], [18, 1, '你却能解码', 's'], [19, 2, '啦啦啦啦 我亲爱的你呀', 's'],
+  [16.24, 19.96, '上一秒我在台北看烟火', 'g'], [19.96, 23.18, '下一秒你在上海喝Mojito', 'g'], [23.18, 27.20, '你感觉我 就像我感觉你', 'g'], [27.20, 29.01, '世界上的另一个我', 'g'],
+  [29.01, 32.41, '上一秒我在柏林落大雨', 's'], [32.41, 35.96, '下一秒你在曼谷天气晴', 's'], [35.96, 40.30, '你感受我 就像我感受你', 's'], [40.30, 43.30, '世界上的另一个我', 's'],
+  [58.91, 62.67, '岁月为我大浪淘沙', 'g'], [62.67, 64.00, '而你被留下', 'g'], [64.00, 66.29, '我的世界流转变化', 'g'], [66.29, 67.62, '你却没时差', 'g'], [67.62, 72.50, '啦啦啦啦 我亲爱的你呀', 'g'],
+  [74.73, 77.04, '岁月待我晴雨交加', 's'], [77.04, 78.36, '而你被孵化', 's'], [78.36, 80.19, '我的心事纷乱复杂', 's'], [80.19, 81.94, '你却能解码', 's'], [81.94, 88.40, '啦啦啦啦 我亲爱的你呀', 's'],
 ];
+// the four 啦 notes of each 啦啦啦啦, and where 我亲爱的你呀 starts (clip time)
+const LA_G = [67.62, 68.20, 68.80, 69.30].map(SONG), YA_G = SONG(70.09);
+const LA_S = [81.94, 82.60, 83.30, 83.80].map(SONG), YA_S = SONG(84.50);
 
 // ---------- the two friends ----------
 // 采: rosy, a white flower on her head. 肆: butter yellow, a teal beanie. Mood tints are dropped so both stay on model.

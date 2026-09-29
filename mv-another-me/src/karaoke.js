@@ -5,10 +5,10 @@
 // { from, to, at }: at time `at`, the characters `from` get a painted strike and `to` pops in above them (e.g. the fans'
 // 大经理 → 大锦鲤 joke); opts.hold = seconds the line stays up after it ends, lifted above the next line.
 // Times are clip times: the song's LRC time minus the clip start (see references/music-video.md). Let lines run into each other.
-// Built from LINES (ot_set.js): each line runs from its bar to the next line's bar; it's sung over ~85 % of a one-bar line
-// and over the first bar and a half of a two-bar one. opts.fill = the singer's colour (rose 郭, butter 肆).
-const LY = LINES.map(([b0, nb, txt, who]) => [bar(b0) - .12, bar(b0 + nb) - .05, txt,
-  { sing: nb > 1 ? BAR * 1.6 : BAR * .85, fill: who === 'g' ? '#F4A0B6' : '#F6D27A' }]);
+// Built from LINES (ot_set.js, song seconds → clip seconds): each line shows from its onset to the next one and fills
+// over the time it's sung. opts.fill = the singer's colour (rose 郭, butter 肆).
+const LY = LINES.map(([on, end, txt, who]) => [SONG(on) - .12, SONG(end) - .05, txt,
+  { sing: (end - on) * .88, fill: who === 'g' ? '#F4A0B6' : '#F6D27A' }]);
 const KFONT = '"MSZ", "Ma Shan Zheng", "Kaiti SC", "STKaiti", serif';
 window.EXTRA_FONTS = [[`64px ${KFONT}`, LY.map(l => l[2] + ((l[3] && l[3].pun && l[3].pun.to) || '')).join('')]];
 

@@ -1,7 +1,6 @@
-// config.js: project settings. See STORYBOARD.md for the song grid.
-//   bpm/offset: ASSUMED grid (92 BPM, first sung bar at 1 bar in) until the song file is measured with
-//   scripts/beat_grid.py; every shot is keyed to bars and beats, so changing these re-times the whole video.
-//   duration: 22 bars (intro + 20 lyric bars + outro) + a 1 s hold.
-//   fastFill: cheap stand-in for p5.brush watercolour fills (this machine renders WebGL in software).
-const PROJECT = { bpm: 92, offset: 0, fastFill: true, density: .6667 };
-PROJECT.duration = 22 * 4 * 60 / PROJECT.bpm + 1;
+// config.js: project settings.
+//   bpm: measured from the song (beat_grid.py on the vocal/mix): 132.5 BPM; the clip starts on a beat, so offset 0.
+//   duration: the length of assets/clip.m4a (see ot_set.js for how it's cut).
+//   fastFill / density: cheap stand-ins for p5.brush watercolour fills and a 2/3-resolution paint layer, for rendering
+//   on a machine without a GPU (software WebGL). Set fastFill: false, density: 1 on a machine with a GPU.
+const PROJECT = { bpm: 132.5, offset: 0, duration: 64.0, fastFill: true, density: .6667, audio: 'assets/clip.m4a' };

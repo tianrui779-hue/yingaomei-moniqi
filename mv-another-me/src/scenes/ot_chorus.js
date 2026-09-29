@@ -1,8 +1,8 @@
 // ot_chorus.js: bars 9–21. Chorus, 郭's half (beach, seasons, clocks, dance) then 肆's half (sun/rain, egg,
-// tangle, decode), and the finale back on the Taipei roof, together. b = beats into the shot.
+// tangle, decode), and the finale back on the Taipei roof, together. b = quarters of the shot (Q = its length / 4); the 啦 shots use the measured note times.
 (() => {
   const GY = 900;
-  const beats = lt => lt / BEAT;
+  const beats = lt => lt / Q;
   const glassIn = (a, level) => (uu, sw) => { upright(a); mojito(.4 * uu, 2.2 * uu, 1.0 * uu, { level, key: 'g' + uu }); };
 
   // ---------- the beach and the wave ----------
@@ -56,8 +56,8 @@
 
   // ---------- 9 · 岁月为我大浪淘沙: the wave rises and sweeps the beach clean ----------
   // the wave rears up at the left edge (b0–b2), then rolls across the whole beach (b2–b4)
-  const waveFront = t => kf(t, [[bar(9), -60], [bar(9) + 2 * BEAT, 300], [bar(10), W + 700]], easeIn);
-  const waveH = t => lerp(0, 520, easeOut(seg(t, bar(9), bar(9) + 2 * BEAT)));
+  const waveFront = t => kf(t, [[at(9, 0), -60], [at(9, 2), 300], [cutAt(10), W + 700]], easeIn);
+  const waveH = t => lerp(0, 520, easeOut(seg(t, at(9, 0), at(9, 2))));
   function s9(t, lt, dur) {
     const b = beats(lt), f = waveFront(t);
     camBegin(960 + 15 * Math.sin(lt), 520, 1.03 + .02 * lt);
@@ -66,7 +66,7 @@
     { const p = swept(f, 1120, 930); push(); translate(p[0], p[1]); rotate(p[2]); sandcastle(0, 0, 36); pop(); }
     { const p = swept(f, 640, 950); push(); translate(p[0], p[1]); rotate(p[2] * 1.5); paperBoat(0, 0, 40); pop(); }
     { const p = swept(f, 1390, 950); wallClock(p[0], p[1] - 40, 40, .15, .6 + t * .4, 0, '#F3E3C4', 'beachclock'); }
-    const m = emotions(lt, [[0, 'happy', { lookX: -.6 }], [1 * BEAT, 'surprised', { lookX: -1, lookY: -.6 }], [2.4 * BEAT, 'scared', { lookX: -1, lookY: -.8 }]], { take: 1 });
+    const m = emotions(lt, [[0, 'happy', { lookX: -.6 }], [1 * Q, 'surprised', { lookX: -1, lookY: -.6 }], [2.4 * Q, 'scared', { lookX: -1, lookY: -.8 }]], { take: 1 });
     cai(1640, GY, 26, { ...m, flip: true, view: 'q', aL: lerp(.2, 1.3, seg(b, 2.3, 2.6)), aR: lerp(.2, 1.3, seg(b, 2.4, 2.7)) });
     bigWave(f, waveH(t), t);
     camEnd();
@@ -82,15 +82,15 @@
     // the sparkle, then 肆 pops up out of the sand
     const X = 1000, spark = seg(b, 1, 1.3), up = backOut(seg(b, 2, 2.35));
     if (b > 1 && b < 2.3) { boilSeed('sparkle'); glow(X, GY - 10, 90 * spark, '#FFE3A0', 1); emote('spark', X, GY - 30, 50, spark, lt); }
-    const ms = emotions(lt, [[0, 'surprised', { lookX: .6 }], [2.2 * BEAT, 'excited', { lookX: .8 }], [3.3 * BEAT, 'love', { lookX: 1 }]], { take: .8 });
+    const ms = emotions(lt, [[0, 'surprised', { lookX: .6 }], [2.2 * Q, 'excited', { lookX: .8 }], [3.3 * Q, 'love', { lookX: 1 }]], { take: .8 });
     si(X, GY + lerp(9 * 24, 0, up), 24, { ...ms, noShadow: up < .9, aL: lerp(-.3, 1.3, up), aR: lerp(-.3, 1.3, up) });
     boilSeed('sandfront');
     paint(rectPts(-400, GY + 10, W + 800, 300), { wash: '#E4BD84', ink: null });
     inkLine([[-400, GY + 10], [W + 400, GY + 10]], .5, mixCol('#D8A868', PAL.ink, .3), 'inkfine', 0);
     if (up > .05 && up < 1) for (let i = 0; i < 6; i++) { boilSeed('spray' + i); const a = -Math.PI / 2 + (i - 2.5) * .45, r = 140 * up; paint(ellPts(X + Math.cos(a) * r, GY - 20 + Math.sin(a) * r, 10, 10, 8), { wash: '#D8A868', ink: null }); }
     // 采 runs in from the right and hugs her
-    const run = stroll(lt, 2.4 * BEAT, 3.2 * BEAT, 1640, X + 12 * 24 + 10, 26);
-    const mc = emotions(lt, [[0, 'relieved', { lookX: -1 }], [2.1 * BEAT, 'surprised', { lookX: -1 }], [3.2 * BEAT, 'love', { lookX: -1 }]], { take: .7 });
+    const run = stroll(lt, 2.4 * Q, 3.2 * Q, 1640, X + 12 * 24 + 10, 26);
+    const mc = emotions(lt, [[0, 'relieved', { lookX: -1 }], [2.1 * Q, 'surprised', { lookX: -1 }], [3.2 * Q, 'love', { lookX: -1 }]], { take: .7 });
     const hug = seg(b, 3.2, 3.5);
     cai(run.x, GY, 26, { ...mc, ...run, flip: true, view: hug > 0 ? 'front' : run.view, rot: -.12 * hug, aL: lerp(-.2, 1.1, hug), aR: -.2 });
     if (hug > 0) { boilSeed('hug'); emote('hearts', X + 6 * 26, GY - 12 * 26, 50, hug, lt); }
@@ -126,18 +126,18 @@
     } else for (const [dx, dy] of [[-150, -360], [140, -380], [0, -440]]) { boilSeed('snowcap' + dx); paint(ellPts(TX + dx * .8, TY + dy * .9 - 8, 50 * pop, 14 * pop, 12), { wash: PAL.cream, ink: PAL.ink, sw: .6 }); }
     if (S.fall) for (let k = 0; k < 22; k++) {   // petals / leaves / snow
       boilSeed('fall' + i + k);
-      const ph = frac(hash(k * 2.3) + (t - bar(11) - i * BEAT) * (.35 + .2 * hash(k))), x = 200 + hash(k * 5.1) * 1600 + 60 * Math.sin(t * 2 + k), y = -50 + ph * 1000;
+      const ph = frac(hash(k * 2.3) + (t - at(11, i)) * (.35 + .2 * hash(k))), x = 200 + hash(k * 5.1) * 1600 + 60 * Math.sin(t * 2 + k), y = -50 + ph * 1000;
       if (S.snow) paint(ellPts(x, y, 7, 7, 8), { wash: '#FFFFFF', ink: PAL.ink, sw: .3 });
       else paint(ellPts(x, y, 13, 7, 10, 0, t * 3 + k), { wash: S.fall, ink: PAL.ink, sw: .4 });
     }
     // 采: a take on every change
-    const keys = SEASONS.map((s, j) => [j * BEAT, s.emo, { lookX: .7, lookY: -.5, emote: j === 3 ? 'swirl' : j === 2 ? '!' : null }]);
+    const keys = SEASONS.map((s, j) => [j * Q, s.emo, { lookX: .7, lookY: -.5, emote: j === 3 ? 'swirl' : j === 2 ? '!' : null }]);
     const m = emotions(lt, keys, { take: .9 });
     cai(780, GY, 30, { ...m, aL: .3 + .6 * pulse(t, 5), aR: .3 + .6 * pulse(t + .1, 5) });
     flash(.35 * Math.exp(-(b - i) * 10) * (i > 0 ? 1 : 0));
-    const at = toScreen(780, GY - 4 * 30);
+    const irisAt = toScreen(780, GY - 4 * 30);
     camEnd();
-    if (lt > dur - .35) iris(at[0], at[1], lerp(1300, 0, easeIn((lt - (dur - .35)) / .35)), PAL.ink);
+    if (lt > dur - .35) iris(irisAt[0], irisAt[1], lerp(1300, 0, easeIn((lt - (dur - .35)) / .35)), PAL.ink);
   }
 
   // ---------- 12 · 你却没时差: two clocks spin, then snap to twelve on the same beat ----------
@@ -167,8 +167,8 @@
       const a = -Math.PI / 2 + (k - 1) * .7, r0 = 150 + 40 * seg(b, 2, 2.4);
       inkLine([[cx + Math.cos(a) * r0, 270 + Math.sin(a) * r0], [cx + Math.cos(a) * (r0 + 40), 270 + Math.sin(a) * (r0 + 40)]], 2, '#E8AA38', 'ink', 0);
     }
-    const keys = side => [[0, 'dizzy', { lookY: -1, lookX: side * .2 }], [2 * BEAT, 'surprised', { lookY: -1 }], [3 * BEAT, 'laugh', { lookX: side }]];
-    const hopC = jump(lt, 3 * BEAT, 3 * BEAT + .35, .9), hopS = jump(lt, 3 * BEAT + .07, 3 * BEAT + .42, .9);
+    const keys = side => [[0, 'dizzy', { lookY: -1, lookX: side * .2 }], [2 * Q, 'surprised', { lookY: -1 }], [3 * Q, 'laugh', { lookX: side }]];
+    const hopC = jump(lt, 3 * Q, 3 * Q + .35, .9), hopS = jump(lt, 3 * Q + .07, 3 * Q + .42, .9);
     const mc = emotions(lt, keys(1), { take: 1 }), ms = emotions(lt, keys(-1), { take: 1 });
     cai(720, GY, 26, { ...mc, dy: (mc.dy || 0) + hopC.dy, sq: (mc.sq || 0) + hopC.sq, aL: .2, aR: .2 + .8 * seg(b, 3, 3.3) });
     si(1200, GY, 26, { ...ms, dy: (ms.dy || 0) + hopS.dy, sq: (ms.sq || 0) + hopS.sq, aL: .2 + .8 * seg(b, 3, 3.3), aR: .2 });
@@ -180,8 +180,8 @@
 
   // ---------- 13–14 · 啦啦啦啦 我亲爱的你呀: a note per "啦", then a cheek bump ----------
   function s13(t, lt, dur) {
-    const b = beats(lt);
-    camBegin(960, 520 - 10 * seg(b, 4, 8), 1.02 + .08 * ease(seg(b, 4, 7)));
+    const Y = YA_G;   // 我亲爱的你呀 starts; the four 啦 are at LA_G
+    camBegin(960, 520 - 10 * seg(t, Y, Y + 3), 1.02 + .08 * ease(seg(t, Y, Y + 2.5)));
     skyIn(FULL, '#E48A78', '#FBD59A', t, 'dsky', 700);
     boilSeed('dsun'); glow(960, 640, 300, '#FFC07A', .9); paint(ellPts(960, 660, 150, 150, 28), { wash: '#FBD27A', ink: null });
     boilSeed('dhill'); paint(ellPts(400, 880, 900, 220, 36, 3), { wash: '#B7658A', ink: PAL.ink, sw: .7 }); paint(ellPts(1600, 900, 900, 200, 36, 3), { wash: '#9E5A86', ink: PAL.ink, sw: .7 });
@@ -189,23 +189,23 @@
     for (let i = 0; i < 14; i++) inkLine([[-200 + i * 170, 870], [-260 + i * 170, 1100]], .6, '#5A3C2E', 'inkfine', 0);
     partyLights(FULL, 120, t);
     const CXd = 720, SXd = 1200;
-    // bar 13: hop in turn on each 啦 (采 on 0 and 2, 肆 on 1 and 3), a note pops over the hopper
-    const hopAt = k => jump(lt, k * BEAT, k * BEAT + .38, 1.4);
+    // hop in turn on each 啦 (采 on 1st and 3rd, 肆 on 2nd and 4th), a note pops over the hopper
+    const hopAt = k => jump(t, LA_G[k], LA_G[k] + .38, 1.4);
     const hc = [0, 2].map(hopAt).reduce((a, h) => ({ dy: a.dy + h.dy, sq: a.sq + h.sq }), { dy: 0, sq: 0 });
     const hs = [1, 3].map(hopAt).reduce((a, h) => ({ dy: a.dy + h.dy, sq: a.sq + h.sq }), { dy: 0, sq: 0 });
-    // bar 14: turn to each other, lean in, cheek bump on b5, hearts
-    const lean = ease(seg(b, 4.6, 5)), bump = spring(lt, 5 * BEAT, 5, 20);
-    const mc = emotions(lt, [[0, 'laugh'], [4.3 * BEAT, 'love', { lookX: 1 }]], { take: .7 });
-    const ms = emotions(lt, [[0, 'laugh'], [4.5 * BEAT, 'love', { lookX: -1 }]], { take: .7 });
-    cai(CXd + 110 * lean, GY, 28, { ...mc, dy: (mc.dy || 0) + hc.dy, sq: (mc.sq || 0) + hc.sq, rot: .12 * lean + .05 * bump, aL: b < 4 ? 1.2 + .3 * Math.sin(lt * 8) : .2, aR: b < 4 ? 1.1 : lerp(.2, .6, lean), blush: lean });
-    si(SXd - 110 * lean, GY, 28, { ...ms, dy: (ms.dy || 0) + hs.dy, sq: (ms.sq || 0) + hs.sq, rot: -.12 * lean - .05 * bump, aR: b < 4 ? 1.2 - .3 * Math.sin(lt * 8) : .2, aL: b < 4 ? 1.1 : lerp(.2, .6, lean), blush: lean });
+    // 我亲爱的你呀: turn to each other, lean in, cheek bump on 亲爱, hearts; then hold through the break
+    const lean = ease(seg(t, Y + .1, Y + .45)), bump = spring(t, Y + .5, 5, 20), y0 = Y - cutAt(13);
+    const mc = emotions(lt, [[0, 'laugh'], [y0 - .15, 'love', { lookX: 1 }]], { take: .7 });
+    const ms = emotions(lt, [[0, 'laugh'], [y0, 'love', { lookX: -1 }]], { take: .7 });
+    cai(CXd + 110 * lean, GY, 28, { ...mc, dy: (mc.dy || 0) + hc.dy, sq: (mc.sq || 0) + hc.sq, rot: .12 * lean + .05 * bump, aL: t < Y ? 1.2 + .3 * Math.sin(lt * 8) : .2, aR: t < Y ? 1.1 : lerp(.2, .6, lean), blush: lean });
+    si(SXd - 110 * lean, GY, 28, { ...ms, dy: (ms.dy || 0) + hs.dy, sq: (ms.sq || 0) + hs.sq, rot: -.12 * lean - .05 * bump, aR: t < Y ? 1.2 - .3 * Math.sin(lt * 8) : .2, aL: t < Y ? 1.1 : lerp(.2, .6, lean), blush: lean });
     for (let k = 0; k < 4; k++) {
-      const age = lt - k * BEAT; if (age < 0 || age > 1.6) continue;
+      const age = t - LA_G[k]; if (age < 0 || age > 1.6) continue;
       boilSeed('note' + k);
       const x = (k % 2 ? SXd : CXd) + (k < 2 ? -60 : 60), y = GY - 13 * 28 - age * 120;
       emote('music', x, y, 52 * (1 - seg(age, 1.2, 1.6)), backOut(clamp(age / .25)), age);
     }
-    if (b > 5) { boilSeed('bumpH'); glow(960, GY - 9 * 28, 200 * seg(b, 5, 5.3), '#FFB0C0', .8); emote('hearts', 960, GY - 11 * 28, 70, seg(b, 5, 5.3), lt); }
+    if (t > Y + .5) { boilSeed('bumpH'); glow(960, GY - 9 * 28, 200 * seg(t, Y + .5, Y + .7), '#FFB0C0', .8); emote('hearts', 960, GY - 11 * 28, 70, seg(t, Y + .5, Y + .7), lt); }
     camEnd();
     if (lt < .3) brushWipe(.5 + lt / .6, ['#E48A78', '#F4B63A']);
     if (lt > dur - .3) { boilSeed('wipe14'); brushWipe((lt - (dur - .3)) / .6, ['#8EC3E6', '#9CCB7A']); }
@@ -222,7 +222,7 @@
     paint(ellPts(960, 1150, 1500, 380, 40, 3), { wash: wet ? '#6E8F60' : '#8DBF6A', ink: PAL.ink, sw: .9 });
     for (let j = 0; j < 12; j++) { boilSeed('fl' + j); const x = 120 + j * 150 + 40 * hash(j), y = 880 + 60 * hash(j + 1); paint(ellPts(x, y, 10, 10, 8), { wash: ['#F4B6C8', '#FFF5E2', '#F4D05A'][j % 3], ink: PAL.ink, sw: .4 }); }
     if (wet) rainIn(FULL, t, 1, '#DCE6F2', 'r15');
-    const keys = [[0, 'happy'], [1 * BEAT, 'nervous', { lookY: -1 }], [2 * BEAT, 'happy'], [3 * BEAT, 'surprised', { lookY: -1 }]];
+    const keys = [[0, 'happy'], [1 * Q, 'nervous', { lookY: -1 }], [2 * Q, 'happy'], [3 * Q, 'surprised', { lookY: -1 }]];
     const m = emotions(lt, keys, { take: .7 });
     const open = wet ? backOut(k) : 1 - ease(seg(b - i, 0, .12)), a = 1.25;
     si(900, GY, 30, { ...m, aR: a, aL: -.2, armR: (uu) => { upright(a); umbrella(0, .2 * uu, 1.7 * uu, clamp(open, 0, 1.1), 0, '#E2687A', { key: 'umb15' }); } });
@@ -242,7 +242,7 @@
     skyIn(FULL, '#BFE3F0', '#FFF1C8', t, 'esky');
     boilSeed('hedge'); for (let i = 0; i < 6; i++) paint(lumpCloud(i * 380, 760, 260, 130, i), { wash: '#7FB069', ink: PAL.ink, sw: .7 });
     boilSeed('egrass'); paint(rectPts(-400, 820, W + 800, 500), { wash: '#9CCB7A', ink: PAL.ink, sw: .8 });
-    const ms = emotions(lt, [[0, 'thinking', { lookX: 1, lookY: .3 }], [1 * BEAT, 'surprised', { lookX: 1, lookY: .3 }], [2.2 * BEAT, 'love', { lookX: .8 }]], { take: .7 });
+    const ms = emotions(lt, [[0, 'thinking', { lookX: 1, lookY: .3 }], [1 * Q, 'surprised', { lookX: 1, lookY: .3 }], [2.2 * Q, 'love', { lookX: .8 }]], { take: .7 });
     si(680, GY, 30, { ...ms, aR: .2, aL: -.2 });
     // the egg (with her flower's colours in its spots), on a nest to the right
     const EX = 1260, EY = 860, wob = seg(b, 0, 1) > 0 && b < 2 ? Math.sin(lt * 26) * .12 * (1 - seg(b, 1.6, 2)) : 0;
@@ -250,7 +250,7 @@
     const hatch = seg(b, 2, 2.3), capP = arcPt([EX, EY - 190], [EX - 24, EY - 225], 260, ease(seg(b, 2, 2.9)));
     if (b >= 2) {   // tiny 采 pops out of the lower shell
       const up = backOut(seg(b, 2, 2.35));
-      const mc = emotions(lt, [[2 * BEAT, 'excited'], [3 * BEAT, 'love', { lookX: -1 }]], { take: .8 });
+      const mc = emotions(lt, [[2 * Q, 'excited'], [3 * Q, 'love', { lookX: -1 }]], { take: .8 });
       cai(EX, EY - 40 - 60 * up, 12, { ...mc, noShadow: true, hat: null, aL: 1.2, aR: 1.2 * up });
     }
     boilSeed('egg');
@@ -295,7 +295,7 @@
     const b = beats(lt), grow = ease(seg(b, 0, 3.4)), n = Math.round(lerp(18, NT, clamp(b / 3.2)));
     camBegin(960, 520 + 20 * seg(b, 0, 4), 1.02 + .05 * seg(b, 0, 4));
     thoughts(t, lt);
-    const ms = emotions(lt, [[0, 'thinking', { lookY: -1 }], [1 * BEAT, 'confused', { lookY: -1 }], [2.5 * BEAT, 'dizzy', { emote: 'sweat' }]], { take: .6 });
+    const ms = emotions(lt, [[0, 'thinking', { lookY: -1 }], [1 * Q, 'confused', { lookY: -1 }], [2.5 * Q, 'dizzy', { emote: 'sweat' }]], { take: .6 });
     si(960, GY, 34, { ...ms, aL: .3 + .4 * Math.sin(lt * 5), aR: .9 + .3 * Math.sin(lt * 4) });
     boilSeed('tdots'); for (let i = 0; i < 3; i++) paint(ellPts(960 + 30 * i, 560 - i * 45, 10 + 5 * i, 10 + 5 * i, 10), { wash: PAL.cream, ink: PAL.ink, sw: .6 });
     const P = tanglePts(lerp(60, 200, grow) * (1 + .05 * pulse(t, 4)), n);
@@ -306,10 +306,10 @@
     const b = beats(lt), un = ease(seg(b, 1.9, 3)), fillH = seg(b, 3, 3.3);
     camBegin(960, 540, 1.07 - .05 * seg(b, 0, 2));
     thoughts(t, lt);
-    const ms = emotions(lt, [[0, 'dizzy', { emote: 'sweat' }], [1.9 * BEAT, 'idea', { lookY: -1 }], [3.1 * BEAT, 'love', { lookX: 1 }]], { take: .8 });
+    const ms = emotions(lt, [[0, 'dizzy', { emote: 'sweat' }], [1.9 * Q, 'idea', { lookY: -1 }], [3.1 * Q, 'love', { lookX: 1 }]], { take: .8 });
     si(960, GY, 34, { ...ms, aL: .3, aR: .4 });
-    const walk = stroll(lt, 0, 1.2 * BEAT, 1800, 1480, 26);
-    const mc = emotions(lt, [[0, 'determined', { lookX: -1, lookY: -.6 }], [2 * BEAT, 'proud', { lookX: -1, lookY: -.6 }], [3.1 * BEAT, 'love', { lookX: -1 }]], { take: .6 });
+    const walk = stroll(lt, 0, 1.2 * Q, 1800, 1480, 26);
+    const mc = emotions(lt, [[0, 'determined', { lookX: -1, lookY: -.6 }], [2 * Q, 'proud', { lookX: -1, lookY: -.6 }], [3.1 * Q, 'love', { lookX: -1 }]], { take: .6 });
     const pull = ease(seg(b, 1.2, 1.9)), aC = lerp(.2, 1.1, ease(seg(b, 1, 1.3))) - .3 * pull;
     cai(walk.x + 40 * pull, GY, 26, { ...mc, ...walk, flip: true, view: walk.view === 'front' ? 'q' : walk.view, aL: aC, aR: -.2 });
     // the tangle (full), a loose end running to 采's paw, then it unravels into one heart
@@ -326,36 +326,36 @@
 
   // ---------- 19–21 · 啦啦啦啦 我亲爱的你呀 + outro: the Taipei roof again, together ----------
   function s19(t, lt, dur) {
-    const b = beats(lt), T0 = bar(19);
-    camBegin(960, lerp(540, 470, ease(seg(b, 6, 11))), lerp(1.02, 1.12, ease(seg(b, 4, 12))));
+    const Y = YA_S, y0 = Y - cutAt(18);   // 我亲爱的你呀 starts; the four 啦 are at LA_S
+    camBegin(960, lerp(540, 470, ease(seg(t, Y + 1.2, Y + 5))), lerp(1.02, 1.12, ease(seg(t, Y - 1, DUR))));
     skyIn(FULL, '#1F2550', '#3E4C8C', t, 'fsky');
     starsIn(FULL, t, 40, 'fst');
     const FW = [[760, 250, '#F4B63A'], [1300, 210, '#E27A92'], [520, 320, '#6FC3C0'], [1500, 330, '#F6D27A']];
-    FW.forEach(([x, y, c], k) => firework(t, T0 + k * BEAT, x, y, c, { r: 200, n: 14, x0: x + 40, gy: 820, climb: .5, key: 'f19' + k }));
-    firework(t, T0 + 6 * BEAT, 960, 250, '#F28AA8', { r: 240, n: 26, heart: true, life: 3.2, x0: 980, gy: 820, climb: .8, key: 'fheart' });
-    firework(t, T0 + 9 * BEAT, 560, 220, '#F4B63A', { r: 170, n: 12, life: 1.8, key: 'f21a', climb: .5 });
-    firework(t, T0 + 10 * BEAT, 1380, 240, '#6FC3C0', { r: 170, n: 12, life: 1.8, key: 'f21b', climb: .5 });
+    FW.forEach(([x, y, c], k) => firework(t, LA_S[k], x, y, c, { r: 200, n: 14, x0: x + 40, gy: 820, climb: .5, key: 'f19' + k }));
+    firework(t, Y + 1.4, 960, 250, '#F28AA8', { r: 240, n: 26, heart: true, life: 3.2, x0: 980, gy: 820, climb: .8, key: 'fheart' });
+    firework(t, Y + 3.3, 560, 220, '#F4B63A', { r: 170, n: 12, life: 1.8, key: 'f21a', climb: .5 });
+    firework(t, Y + 3.9, 1380, 240, '#6FC3C0', { r: 170, n: 12, life: 1.8, key: 'f21b', climb: .5 });
     skyline(FULL, 820, '#1B1F44', '#F2B84E', 11, 60, 170, .35);
     taipei101(1640, 820, 30, '#3A4A7A', '#F2C86A', t);
     skyline(FULL, 860, '#262B58', '#F2B84E', 3, 40, 110, .55);
     rooftop(FULL, GY - 10, '#4B4A6C', 'froof');
     partyLights(reg(-100, W + 100), 60, t, 'flights');
-    // hops in turn on the four 啦 (采 0, 2 · 肆 1, 3), then glasses up and a clink on bar 20 b1 (b5)
-    const hopAt = k => jump(lt, k * BEAT, k * BEAT + .38, 1.3);
+    // hops in turn on the four 啦 (采 1st and 3rd · 肆 2nd and 4th), then glasses up and a clink on 亲爱
+    const hopAt = k => jump(t, LA_S[k], LA_S[k] + .38, 1.3);
     const hc = [0, 2].map(hopAt).reduce((a, h) => ({ dy: a.dy + h.dy, sq: a.sq + h.sq }), { dy: 0, sq: 0 });
     const hs = [1, 3].map(hopAt).reduce((a, h) => ({ dy: a.dy + h.dy, sq: a.sq + h.sq }), { dy: 0, sq: 0 });
-    const raise = ease(seg(b, 4, 4.8)), clink = spring(lt, 5 * BEAT, 6, 22), aC = lerp(-.2, .75, raise) + .1 * clink, aS = aC;
-    const lookUp = b > 6.2;
-    const mc = emotions(lt, [[0, 'excited', { lookY: -1 }], [4 * BEAT, 'happy', { lookX: 1 }], [6.3 * BEAT, 'love', { lookY: -1, lookX: .3 }]], { take: .7 });
-    const ms = emotions(lt, [[0, 'excited', { lookY: -1 }], [4 * BEAT, 'happy', { lookX: -1 }], [6.4 * BEAT, 'love', { lookY: -1, lookX: -.3 }]], { take: .7 });
-    cai(790, GY, 28, { ...mc, dy: (mc.dy || 0) + hc.dy, sq: (mc.sq || 0) + hc.sq, aR: aC, aL: b < 4 ? 1.1 + .3 * Math.sin(lt * 8) : -.2, armR: glassIn(aC, .7), rot: lookUp ? .04 : 0 });
-    si(1130, GY, 28, { ...ms, dy: (ms.dy || 0) + hs.dy, sq: (ms.sq || 0) + hs.sq, aL: aS, aR: b < 4 ? 1.1 - .3 * Math.sin(lt * 8) : -.2, armL: glassIn(aS, .6), rot: lookUp ? -.04 : 0 });
-    if (b > 5 && b < 6) { boilSeed('clink'); const k = seg(b, 5, 5.2); glow(960, GY - 8 * 28, 120 * (1 - seg(b, 5.2, 6)), '#FFF0C8', 1); emote('spark', 960, GY - 9.5 * 28, 50, k, lt); }
-    const at = toScreen(960, GY - 4 * 28);
+    const raise = ease(seg(t, Y - .5, Y + .1)), clink = spring(t, Y + .5, 6, 22), aC = lerp(-.2, .75, raise) + .1 * clink, aS = aC;
+    const lookUp = t > Y + 1.6;
+    const mc = emotions(lt, [[0, 'excited', { lookY: -1 }], [y0 - .5, 'happy', { lookX: 1 }], [y0 + 1.6, 'love', { lookY: -1, lookX: .3 }]], { take: .7 });
+    const ms = emotions(lt, [[0, 'excited', { lookY: -1 }], [y0 - .45, 'happy', { lookX: -1 }], [y0 + 1.7, 'love', { lookY: -1, lookX: -.3 }]], { take: .7 });
+    cai(790, GY, 28, { ...mc, dy: (mc.dy || 0) + hc.dy, sq: (mc.sq || 0) + hc.sq, aR: aC, aL: t < Y - .5 ? 1.1 + .3 * Math.sin(lt * 8) : -.2, armR: glassIn(aC, .7), rot: lookUp ? .04 : 0 });
+    si(1130, GY, 28, { ...ms, dy: (ms.dy || 0) + hs.dy, sq: (ms.sq || 0) + hs.sq, aL: aS, aR: t < Y - .5 ? 1.1 - .3 * Math.sin(lt * 8) : -.2, armL: glassIn(aS, .6), rot: lookUp ? -.04 : 0 });
+    if (t > Y + .5 && t < Y + 1) { boilSeed('clink'); const k = seg(t, Y + .5, Y + .6); glow(960, GY - 8 * 28, 120 * (1 - seg(t, Y + .6, Y + 1)), '#FFF0C8', 1); emote('spark', 960, GY - 9.5 * 28, 50, k, lt); }
+    const irisAt = toScreen(960, GY - 4 * 28);
     camEnd();
     const endK = seg(lt, dur - 1.6, dur - .5);
-    if (endK > 0) iris(at[0], at[1] - 40, lerp(1300, 0, easeIn(endK)), PAL.night);
+    if (endK > 0) iris(irisAt[0], irisAt[1] - 40, lerp(1300, 0, easeIn(endK)), PAL.night);
   }
 
-  shots([[bar(9), s9], [bar(10), s10], [bar(11), s11], [bar(12), s12], [bar(13), s13], [bar(15), s15], [bar(16), s16], [bar(17), s17], [bar(18), s18], [bar(19), s19]]);
+  shotList(9, [s9, s10, s11, s12, s13, s15, s16, s17, s18, s19]);
 })();
