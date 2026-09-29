@@ -32,7 +32,7 @@ const SEAM_X = W / 2;
 function skyIn(R, top, horizon, t, key = 'sky', hy = 760) {
   boilSeed(key);
   paint(rectPts(R.x0, -600, R.w, 2200), { wash: top, ink: null });
-  paint(ellPts(R.cx, hy, R.w * .62, 300, 30, 8), { fill: horizon, fillOp: 170, bleed: .3, ink: null });
+  paint(ellPts(R.cx, hy, R.w * (R.w < W ? .45 : .62), 300, 30, 8), { fill: horizon, fillOp: 170, bleed: .3, ink: null });
 }
 function starsIn(R, t, n = 30, key = 'st') {
   for (let i = 0; i < n; i++) {
@@ -43,7 +43,7 @@ function starsIn(R, t, n = 30, key = 'st') {
 }
 // A row of flat buildings along gy, some windows lit.
 function skyline(R, gy, col, win, seed, hMin = 90, hMax = 260, lit = .6) {
-  let x = R.x0 - 40, i = 0;
+  let x = R.x0 + (R.x0 > 0 ? 20 : -40), i = 0;
   while (x < R.x1 && i < 40) {
     boilSeed('bld' + seed + i);
     const w = 70 + 80 * hash(seed + i * 1.3), h = hMin + (hMax - hMin) * hash(seed + i * 2.9);
