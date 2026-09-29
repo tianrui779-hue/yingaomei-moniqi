@@ -5,10 +5,11 @@
 // assets/clip.m4a = the song from 12.684 s (a beat in the whistle intro) through both verses, the pre-chorus and the
 // whole chorus, to a fade at 92.14 s.
 const SONG = s => s - 12.684;                                  // song time → clip time
-// Shot cuts in song seconds, each where its line starts being sung. Shots act in quarters of their own length (Q), so
+// Shot cuts in song seconds, each where its line starts being sung (verse 2 = verse 1 + 32 beats, matched by melody;
+// 「世界上的另一个我」 is sung in two breaths, the second isn't a new line). Shots act in quarters of their own length (Q), so
 // the same staging stretches to a long line or squeezes into a short one.
-const CUTS = [12.684, 16.20, 19.92, 23.14, 27.16, 28.97, 32.37, 35.92, 40.26,
-  43.40, 46.01, 48.59, 51.76, 54.94,
+const CUTS = [12.684, 16.20, 19.92, 23.14, 27.16, 30.60, 34.36, 37.56, 41.58,
+  45.02, 47.71, 49.89, 52.95, 54.95,
   58.87, 61.84, 63.96, 65.87, 67.58, 74.69, 76.36, 78.32, 80.15, 81.90].map(SONG);
 const cutAt = i => CUTS[i];
 const at = (i, q) => CUTS[i] + q * ((CUTS[i + 1] ?? DUR) - CUTS[i]) / 4;   // q quarters into shot i
@@ -16,9 +17,9 @@ let Q = BEAT;                                                                // 
 function shotList(first, fns) { shots(fns.map((fn, j) => [CUTS[first + j], (t, lt, dur) => { Q = dur / 4; fn(t, lt, dur); }])); }
 // [song onset, song end, text, singer ('g' 郭采洁, 's' 阿肆)]
 const LINES = [
-  [16.24, 19.96, '上一秒我在台北看烟火', 'g'], [19.96, 23.18, '下一秒你在上海喝Mojito', 'g'], [23.18, 27.20, '你感觉我 就像我感觉你', 'g'], [27.20, 29.01, '世界上的另一个我', 'g'],
-  [29.01, 32.41, '上一秒我在柏林落大雨', 's'], [32.41, 35.96, '下一秒你在曼谷天气晴', 's'], [35.96, 40.30, '你感受我 就像我感受你', 's'], [40.30, 43.44, '世界上的另一个我', 's'],
-  [43.44, 46.05, '人生到处是假正经', 'g'], [46.05, 48.63, '变幻莫测捕风捉影', 's'], [48.63, 51.80, '有几个陪我等雨停', 's'], [51.80, 54.98, '难得真性情', 'g'], [54.98, 58.91, '天高海阔我的渊明 谁倾听', 's'],
+  [16.24, 19.96, '上一秒我在台北看烟火', 'g'], [19.96, 23.18, '下一秒你在上海喝Mojito', 'g'], [23.18, 27.20, '你感觉我 就像我感觉你', 'g'], [27.20, 30.64, '世界上的另一个我', 'g'],
+  [30.64, 34.40, '上一秒我在柏林落大雨', 's'], [34.40, 37.60, '下一秒你在曼谷天气晴', 's'], [37.60, 41.62, '你感受我 就像我感受你', 's'], [41.62, 45.06, '世界上的另一个我', 's'],
+  [45.06, 47.75, '人生到处是假正经', 'g'], [47.75, 49.93, '变幻莫测捕风捉影', 's'], [49.93, 52.99, '有几个陪我等雨停', 's'], [52.99, 54.99, '难得真性情', 'g'], [54.99, 58.91, '天高海阔我的渊明 谁倾听', 's'],
   [58.91, 62.67, '岁月为我大浪淘沙', 'g'], [62.67, 64.00, '而你被留下', 'g'], [64.00, 66.29, '我的世界流转变化', 'g'], [66.29, 67.62, '你却没时差', 'g'], [67.62, 72.50, '啦啦啦啦 我亲爱的你呀', 'g'],
   [74.73, 77.04, '岁月待我晴雨交加', 's'], [77.04, 78.36, '而你被孵化', 's'], [78.36, 80.19, '我的心事纷乱复杂', 's'], [80.19, 81.94, '你却能解码', 's'], [81.94, 88.40, '啦啦啦啦 我亲爱的你呀', 's'],
 ];
