@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# rs.sh: render.mjs with this machine's flags (software WebGL, the Playwright Chromium). Usage: ./rs.sh --sheet=... --out=...
+exec node render.mjs --chrome="${CHROME_PATH:-/opt/pw-browsers/chromium}" --soft-gl "$@"
